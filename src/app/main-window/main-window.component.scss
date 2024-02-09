@@ -1,0 +1,147 @@
+.example-container {
+  width: 100vw;
+  height: 100vh;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+
+  .sidenav {
+    width: 260px;
+    --tw-bg-opacity: 1;
+    background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
+    padding: 0.875rem 0.75rem;
+
+
+    .item {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      color: white;
+      padding: 9px;
+      border-radius: 0.5rem;
+      transition: all 0.25s;
+      text-decoration: none;
+
+      &:hover {
+        background: rgba(#fff, 0.2);
+      }
+
+      &.active {
+        background-color: #343541;
+      }
+
+      &.new-chat {
+        margin-bottom: 20px;
+
+        span {
+          margin-left: 0.5rem;
+        }
+
+        .edit-icon {
+          margin-left: auto;
+          flex-grow: 0;
+          font-size: 22px;
+        }
+      }
+
+    }
+  }
+
+  .sidenav-toggle {
+    position: fixed;
+    width: 100%;
+    z-index: 40;
+    top: 50%;
+    left: 0;
+    transition: transform 0.3s;
+    transform: translateX(260px) translateY(-50%) rotate(0deg) translateZ(0px);
+  }
+
+  .chat-conversation-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0%;
+    overflow: hidden;
+    max-width: 100%;
+    height: 100%;
+    background-color: #171717;
+
+
+
+    .upper-menu {
+      display: flex;
+      height: 56px;
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 8px;
+      border: 0.5px solid rgb(227, 227, 227);
+    }
+
+    .conversation-input {
+      display: flex;
+      flex-flow: column;
+      position: fixed;
+      height: 86px;
+      z-index: 10;
+      align-items: center;
+      justify-content: center;
+      bottom: 0;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 48rem;
+      z-index: 1000;
+      background-color: #171717;
+
+
+      .message-input {
+
+        padding: 10px;
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+
+        .textarea-wrapper {
+          position: relative;
+
+          textarea {
+            box-sizing: border-box;
+            width: 732px;
+            max-height: 200px;
+            height: 52px;
+            overflow-y: hidden;
+            padding: 14px 48px 14px 16px;
+            background-color: transparent;
+            resize: none;
+            border: 0.5px solid rgb(155, 155, 155);
+            border-radius: 16px;
+          }
+
+          button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 24px;
+            height: 24px;
+          }
+        }
+
+
+
+        .disclaimer {
+          color: #fff;
+        }
+      }
+    }
+
+  }
+}
+
+.example-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  padding: 20px;
+}
+

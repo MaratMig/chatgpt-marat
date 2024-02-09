@@ -1,0 +1,6 @@
+<div class="message" [ngClass]="role">
+  <div class="message-content">
+    <div class="avatar">{{ role.substr(0, 2) | titlecase }}</div>
+    <div class="text">{{ content }}</div>
+  </div>
+</div>
