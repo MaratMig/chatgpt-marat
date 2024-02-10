@@ -5,8 +5,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ConversationsService } from '../shared/services/conversations.service';
 import { Conversation } from '../models/conversation';
 import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-main-window',
@@ -19,7 +17,6 @@ export class MainWindowComponent implements OnInit {
   conversations$!: Observable<Conversation[]>;
   currentConversation$!: Observable<Conversation | null>;
   currentConversation: Conversation | null = null;
-  textForm!: FormGroup;
 
   dynamicTransformValue: string =
     'translateX(0px) translateY(-50%) rotate(180deg) translateZ(0px)';
@@ -28,8 +25,6 @@ export class MainWindowComponent implements OnInit {
     private conversationsService: ConversationsService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private route: ActivatedRoute,
-    private formBuilder: FormBuilder
   ) {
     this.matIconRegistry.addSvgIcon(
       'chatGptIcon',
@@ -44,9 +39,6 @@ export class MainWindowComponent implements OnInit {
     this.currentConversation$.subscribe(
       (conversation) => (this.currentConversation = conversation)
     );
-    this.textForm = this.formBuilder.group({
-      text: ['', Validators.required],
-    });
   }
 
   toggleSideNav(sidenav: MatSidenav) {
@@ -73,7 +65,5 @@ export class MainWindowComponent implements OnInit {
     } else {
       this.conversationsService.addConversation(messageContent);
     }
-
-    this.textForm.reset();
   }
 }
