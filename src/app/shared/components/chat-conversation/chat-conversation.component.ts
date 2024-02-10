@@ -15,6 +15,7 @@ export class ConversationComponent {
   messages!: Message[];
   conversation!: Conversation | null;
 
+
   constructor(
     private router: ActivatedRoute,
     private conversationsService: ConversationsService

@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { MainWindowComponent } from './main-window/main-window.component';
 import { MessageComponent } from './shared/components/message/message.component';
 import { ConversationComponent } from './shared/components/chat-conversation/chat-conversation.component';
@@ -23,7 +23,9 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     AngularMaterialModule,
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     provideAnimationsAsync()

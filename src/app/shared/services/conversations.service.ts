@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Message } from '../../models/message';
-import { Observable, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map, of, tap } from 'rxjs';
 import * as uuid from 'uuid';
 import { Conversation } from '../../models/conversation';
 import { ApiService } from './api.service';
@@ -15,24 +15,45 @@ export class ConversationsService {
   //   tap(() => console.log('Call to API for all conversations'))
   // );
 
-  private conversations!: Conversation[];
+  private currConversationSubj = new Subject<Conversation>();
+  currentConversation$: Observable<Conversation> =
+    this.currConversationSubj.asObservable();
+  // conversations$ = this.conversationsSubject.asObservable();
+  private conversationsSubject: BehaviorSubject<Conversation[]> =
+    new BehaviorSubject<Conversation[]>([]);
+  private conversations: Conversation[] = [];
 
   constructor(private apiService: ApiService) {}
 
+  // getConversations(): Observable<Conversation[]> {
+  //   if (this.conversations) {
+  //     return this.conversations$;
+  //   } else {
+  //     this.apiService.fetchConversations().pipe(
+  //       tap((conversations) => {
+  //         this.conversations = [...conversations];
+  //         this.conversationsSubj.next(this.conversations)
+  //       })
+  //     );
+  //   }
+  // }
   getConversations(): Observable<Conversation[]> {
-    if (this.conversations) {
-      return of(this.conversations);
+    if (this.conversations.length > 0) {
+      return this.conversationsSubject.asObservable();
     } else {
-      return this.apiService.requestConversationsFromServer().pipe(
-        tap((conversations) => (this.conversations = [...conversations])),
-        map(() => this.conversations)
+      return this.apiService.fetchConversations().pipe(
+        tap((conversations) => {
+          this.conversations = conversations;
+          this.conversationsSubject.next(this.conversations);
+        })
       );
     }
   }
 
-  //create additonal api service low level
   getConversation(id: string): Conversation | null {
-    return this.conversations.find((chat) => chat.id === id) || null;
+    return (
+      this.conversations.find((conversation) => conversation.id === id) || null
+    );
   }
 
   addConversation(message: string) {
@@ -41,7 +62,19 @@ export class ConversationsService {
         ? message.slice(0, this.MAX_NAME_LENGTH) + '...'
         : message;
     let id = uuid.v4();
-    this.conversations.push({ id, name, messages: [{role: 'Me', content: message}] });
+    const newConversation = {
+      id,
+      name,
+      messages: [{ role: 'Me', content: message }],
+    };
+    this.conversations.push(newConversation);
+    this.conversationsSubject.next([...this.conversations]);
+    //optimistic approach
+    this.apiService
+      .addNewConversation(newConversation)
+      .pipe(
+        tap((conversation) => this.currConversationSubj.next(conversation))
+      );
   }
 
   addMessage(chatId: string, message: Message) {

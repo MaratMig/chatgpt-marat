@@ -39,9 +39,14 @@
     <div class="conversation-input">
       <div class="message-input">
         <div class="textarea-wrapper">
-          <textarea #message type="text" placeholder="Type your message here...">
-          </textarea>
-          <button class="add-message" (click)="sendMessage(message.value)"></button>
+          <form [formGroup]="textForm" (ngSubmit)="submitText()">
+            <textarea
+              formControlName="text"
+              placeholder="Type your message here..."
+              (keydown.enter)="submitText()"
+            ></textarea>
+            <button type="submit" class="add-message" [disabled]="textForm.invalid">Submit</button>
+          </form>
         </div>
 
         <div class="disclaimer">

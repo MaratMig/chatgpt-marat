@@ -7,10 +7,15 @@ import mock from './mocks/conversations-mock.json';
   providedIn: 'root',
 })
 export class ApiService {
-  requestConversationsFromServer(): Observable<Conversation[]> {
+  fetchConversations(): Observable<Conversation[]> {
     return of(mock).pipe(
       tap(() => console.log('Call to API for all conversations')),
       shareReplay()
     );
+  }
+
+  addNewConversation(conversation: Conversation) {
+    return of(conversation);
+    console.log('POST new conversation');
   }
 }
