@@ -13,8 +13,6 @@ import { Observable } from 'rxjs';
 })
 export class MainWindowComponent implements OnInit {
   opened: boolean = true;
-  events: string[] = [];
-  conversations$!: Observable<Conversation[]>;
   currentConversation$!: Observable<Conversation | null>;
   currentConversation: Conversation | null = null;
 
@@ -24,7 +22,7 @@ export class MainWindowComponent implements OnInit {
   constructor(
     private conversationsService: ConversationsService,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
+    private domSanitizer: DomSanitizer
   ) {
     this.matIconRegistry.addSvgIcon(
       'chatGptIcon',
@@ -34,11 +32,10 @@ export class MainWindowComponent implements OnInit {
     );
   }
   ngOnInit(): void {
-    this.conversations$ = this.conversationsService.getConversations();
-    this.currentConversation$ = this.conversationsService.currentConversation$;
-    this.currentConversation$.subscribe(
-      (conversation) => (this.currentConversation = conversation)
-    );
+    this.conversationsService.currentConversation$.subscribe((conversation) => {
+      this.currentConversation = conversation;
+      console.log('Changed conversation : ', this.currentConversation);
+    });
   }
 
   toggleSideNav(sidenav: MatSidenav) {
@@ -56,7 +53,10 @@ export class MainWindowComponent implements OnInit {
     }
   }
 
+  updateCurrentConversation(conversation: Conversation) {}
+
   submitText(messageContent: string) {
+    console.log('Main this.currentConversation : ', this.currentConversation);
     if (this.currentConversation) {
       this.conversationsService.addMessage(
         this.currentConversation.id,

@@ -1,14 +1,19 @@
-<a class="item new-chat" [routerLink]="['chat', 'new']">
+<a
+  class="item new-chat"
+  [routerLink]="['/']"
+  (click)="selectConversation(null)"
+>
   <mat-icon svgIcon="chatGptIcon"></mat-icon>
   <span>New Chat</span>
   <mat-icon class="edit-icon" [inline]="true">edit_square</mat-icon>
 </a>
-@if(conversations; as conversations){ @for (conversation of
+@if(conversations$ | async; as conversations){ @for (conversation of
 conversations; track conversation.id) {
 <a
   class="item"
   routerLink="/chat/{{ conversation.id }}"
   routerLinkActive="active"
+  (click)="selectConversation(conversation)"
 >
   {{ conversation.name }}
 </a>

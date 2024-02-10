@@ -17,22 +17,17 @@ export class ConversationsService {
     this.currConversationSubj.asObservable();
   private conversationsSubject: BehaviorSubject<Conversation[]> =
     new BehaviorSubject<Conversation[]>([]);
+
   conversations$ = this.conversationsSubject.asObservable();
   private conversations: Conversation[] = [];
 
   constructor(private apiService: ApiService, private router: Router) {}
 
-  getConversations(): Observable<Conversation[]> {
-    if (this.conversations.length > 0) {
-      return this.conversations$;
-    } else {
-      return this.apiService.fetchConversations().pipe(
-        tap((conversations) => {
-          this.conversations = conversations;
-          this.conversationsSubject.next(this.conversations);
-        })
-      );
-    }
+  getConversations(): void {
+    this.apiService.fetchConversations().subscribe((res) => {
+      this.conversations = res;
+      this.conversationsSubject.next(this.conversations);
+    });
   }
 
   getConversation(id: string): Conversation | null {
@@ -64,11 +59,17 @@ export class ConversationsService {
   }
 
   addMessage(chatId: string, messageContent: string) {
-    let message = { role: 'User', content: messageContent }
+    let message = { role: 'User', content: messageContent };
     let conversationToUpdate = this.conversations.find(
       (conversation) => conversation.id === chatId
     );
     conversationToUpdate!.messages.push(message);
-    this.apiService.updateConversation(chatId, {...conversationToUpdate as Conversation});
+    this.apiService.updateConversation(chatId, {
+      ...(conversationToUpdate as Conversation),
+    });
+  }
+
+  updateCurrentConversation(conversation: Conversation | null) {
+    this.currConversationSubj.next(conversation)
   }
 }
