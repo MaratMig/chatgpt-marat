@@ -1,4 +1,4 @@
-[
+export const conversations = [
   {
     "id": "1",
     "name": "Who won the world series...",
