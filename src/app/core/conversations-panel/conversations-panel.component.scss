@@ -1,0 +1,33 @@
+.item {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  color: white;
+  padding: 9px;
+  border-radius: 0.5rem;
+  transition: all 0.25s;
+  text-decoration: none;
+
+  &:hover {
+    background: rgba(#fff, 0.2);
+  }
+
+  &.active {
+    background-color: #343541;
+  }
+
+  &.new-chat {
+    margin-bottom: 20px;
+
+    span {
+      margin-left: 0.5rem;
+    }
+
+    .edit-icon {
+      margin-left: auto;
+      flex-grow: 0;
+      font-size: 22px;
+    }
+  }
+
+}

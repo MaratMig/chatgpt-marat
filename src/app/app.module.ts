@@ -10,13 +10,14 @@ import { MessageComponent } from './shared/components/message/message.component'
 import { ConversationComponent } from './shared/components/chat-conversation/chat-conversation.component';
 import { AngularMaterialModule } from './shared/angular-material/angular-material.module';
 import { SharedModule } from './shared/shared.module';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainWindowComponent,
     MessageComponent,
-    ConversationComponent
+    ConversationComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,7 +26,8 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CoreModule
   ],
   providers: [
     provideAnimationsAsync()

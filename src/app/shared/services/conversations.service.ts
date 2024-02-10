@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subject, map, of, tap } from 'rxjs';
 import * as uuid from 'uuid';
 import { Conversation } from '../../models/conversation';
 import { ApiService } from './api.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -11,35 +12,19 @@ import { ApiService } from './api.service';
 export class ConversationsService {
   readonly MAX_NAME_LENGTH = 28;
 
-  // conversations$: Observable<Conversation[]> = of(mock).pipe(
-  //   tap(() => console.log('Call to API for all conversations'))
-  // );
-
-  private currConversationSubj = new Subject<Conversation>();
-  currentConversation$: Observable<Conversation> =
+  private currConversationSubj = new BehaviorSubject<Conversation | null>(null);
+  currentConversation$: Observable<Conversation | null> =
     this.currConversationSubj.asObservable();
-  // conversations$ = this.conversationsSubject.asObservable();
   private conversationsSubject: BehaviorSubject<Conversation[]> =
     new BehaviorSubject<Conversation[]>([]);
+  conversations$ = this.conversationsSubject.asObservable();
   private conversations: Conversation[] = [];
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private router: Router) {}
 
-  // getConversations(): Observable<Conversation[]> {
-  //   if (this.conversations) {
-  //     return this.conversations$;
-  //   } else {
-  //     this.apiService.fetchConversations().pipe(
-  //       tap((conversations) => {
-  //         this.conversations = [...conversations];
-  //         this.conversationsSubj.next(this.conversations)
-  //       })
-  //     );
-  //   }
-  // }
   getConversations(): Observable<Conversation[]> {
     if (this.conversations.length > 0) {
-      return this.conversationsSubject.asObservable();
+      return this.conversations$;
     } else {
       return this.apiService.fetchConversations().pipe(
         tap((conversations) => {
@@ -65,21 +50,25 @@ export class ConversationsService {
     const newConversation = {
       id,
       name,
-      messages: [{ role: 'Me', content: message }],
+      messages: [{ role: 'User', content: message }],
     };
     this.conversations.push(newConversation);
+    // console.log('new conversations', this.conversations);
     this.conversationsSubject.next([...this.conversations]);
-    //optimistic approach
     this.apiService
       .addNewConversation(newConversation)
-      .pipe(
-        tap((conversation) => this.currConversationSubj.next(conversation))
-      );
+      .subscribe((conversation) => {
+        this.currConversationSubj.next(conversation);
+        this.router.navigate(['/chat', conversation.id]);
+      });
   }
 
-  addMessage(chatId: string, message: Message) {
-    this.conversations
-      .find((conversation) => conversation.id === chatId)
-      ?.messages.push(message);
+  addMessage(chatId: string, messageContent: string) {
+    let message = { role: 'User', content: messageContent }
+    let conversationToUpdate = this.conversations.find(
+      (conversation) => conversation.id === chatId
+    );
+    conversationToUpdate!.messages.push(message);
+    this.apiService.updateConversation(chatId, {...conversationToUpdate as Conversation});
   }
 }

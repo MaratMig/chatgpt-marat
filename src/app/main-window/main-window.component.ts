@@ -14,10 +14,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrl: './main-window.component.scss',
 })
 export class MainWindowComponent implements OnInit {
-  showFiller = false;
   opened: boolean = true;
   events: string[] = [];
   conversations$!: Observable<Conversation[]>;
+  currentConversation$!: Observable<Conversation | null>;
+  currentConversation: Conversation | null = null;
   textForm!: FormGroup;
 
   dynamicTransformValue: string =
@@ -27,7 +28,6 @@ export class MainWindowComponent implements OnInit {
     private conversationsService: ConversationsService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private convesationService: ConversationsService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder
   ) {
@@ -40,8 +40,12 @@ export class MainWindowComponent implements OnInit {
   }
   ngOnInit(): void {
     this.conversations$ = this.conversationsService.getConversations();
+    this.currentConversation$ = this.conversationsService.currentConversation$;
+    this.currentConversation$.subscribe(
+      (conversation) => (this.currentConversation = conversation)
+    );
     this.textForm = this.formBuilder.group({
-      text: ['', Validators.required]
+      text: ['', Validators.required],
     });
   }
 
@@ -60,11 +64,16 @@ export class MainWindowComponent implements OnInit {
     }
   }
 
-  submitText() {
-    const message = this.textForm.value.text.trim();
-    if (message !== '') {
-      this.conversationsService.addConversation(message);
-      this.textForm.reset();
+  submitText(messageContent: string) {
+    if (this.currentConversation) {
+      this.conversationsService.addMessage(
+        this.currentConversation.id,
+        messageContent
+      );
+    } else {
+      this.conversationsService.addConversation(messageContent);
     }
+
+    this.textForm.reset();
   }
 }

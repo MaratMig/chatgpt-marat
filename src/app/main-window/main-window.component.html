@@ -1,27 +1,7 @@
 <mat-sidenav-container class="example-container">
-  <mat-sidenav
-    class="sidenav"
-    #sidenav
-    mode="side"
-    [(opened)]="opened"
-    (opened)="events.push('open!')"
-    (closed)="events.push('close!')"
-  >
-    <a class="item new-chat" [routerLink]="['chat', 'new']">
-      <mat-icon svgIcon="chatGptIcon"></mat-icon>
-      <span>New Chat</span>
-      <mat-icon class="edit-icon" [inline]="true">edit_square</mat-icon>
-    </a>
-    @if(conversations$ | async; as conversations){ @for (conversation of
-    (conversations$ | async); track conversation.id) {
-    <a
-      class="item"
-      routerLink="/chat/{{ conversation.id }}"
-      routerLinkActive="active"
-    >
-      {{ conversation.name }}
-    </a>
-    } }
+  <mat-sidenav class="sidenav" #sidenav mode="side" [(opened)]="opened">
+    <app-conversations-panel [conversations]="conversations$ | async">
+    </app-conversations-panel>
   </mat-sidenav>
 
   <mat-sidenav-content class="chat-conversation-content">
@@ -36,26 +16,6 @@
     >
       <mat-icon>arrow_forward_ios</mat-icon>
     </div>
-    <div class="conversation-input">
-      <div class="message-input">
-        <div class="textarea-wrapper">
-          <form [formGroup]="textForm" (ngSubmit)="submitText()">
-            <textarea
-              formControlName="text"
-              placeholder="Type your message here..."
-              (keydown.enter)="submitText()"
-            ></textarea>
-            <button type="submit" class="add-message" [disabled]="textForm.invalid">Submit</button>
-          </form>
-        </div>
-
-        <div class="disclaimer">
-          <span
-            >ChatGPT can make mistakes. Consider checking important
-            information.</span
-          >
-        </div>
-      </div>
-    </div>
+    <app-input-panel (emmitForm)="submitText($event)"></app-input-panel>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TransformElementDirective } from './directives/transform-element.directive';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
+import { InputPanelComponent } from './components/input-panel/input-panel.component';
 
-const declarations = [TransformElementDirective]
-const imports = [CommonModule, FormsModule, AngularMaterialModule]
+const declarations = [TransformElementDirective, InputPanelComponent]
+const imports = [CommonModule, FormsModule, ReactiveFormsModule, AngularMaterialModule]
 
 @NgModule({
   declarations: [...declarations],
