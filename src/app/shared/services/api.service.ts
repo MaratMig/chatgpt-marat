@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:3000';
+  baseUrl = 'http://localhost:3000';
   readonly CACHE_SIZE = 1;
 
   constructor(private http: HttpClient) {}
