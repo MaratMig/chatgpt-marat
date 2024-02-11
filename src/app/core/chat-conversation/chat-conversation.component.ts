@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as uuid from 'uuid';
 import { ConversationsService } from '../../shared/services/conversations.service';
 import { Message } from '../../models/message';
 import { Conversation } from '../../models/conversation';

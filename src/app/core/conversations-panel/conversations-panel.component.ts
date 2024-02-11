@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Conversation } from '../../models/conversation';
 import { ConversationsService } from '../../shared/services/conversations.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-conversations-panel',
