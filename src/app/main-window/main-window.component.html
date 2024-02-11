@@ -1,21 +1,22 @@
 <mat-sidenav-container class="example-container">
   <mat-sidenav class="sidenav" #sidenav mode="side" [(opened)]="opened">
-    <app-conversations-panel>
-    </app-conversations-panel>
+    <app-conversations-panel> </app-conversations-panel>
   </mat-sidenav>
 
   <mat-sidenav-content class="chat-conversation-content">
-    <div class="upper-menu"></div>
     <router-outlet></router-outlet>
     <div
       class="sidenav-toggle"
-      appTransformElement
-      [transformValue]="dynamicTransformValue"
+      [ngClass]="{ opened: opened, closed: !opened }"
       mat-button
-      (click)="toggleSideNav(sidenav)"
+      (click)="toggleSideNav()"
     >
       <mat-icon>arrow_forward_ios</mat-icon>
     </div>
-    <app-input-panel (emmitForm)="submitText($event)"></app-input-panel>
+    <app-input-panel
+      [ngClass]="{ grow: !opened }"
+      class="input-panel"
+      (emmitForm)="submitText($event)"
+    ></app-input-panel>
   </mat-sidenav-content>
 </mat-sidenav-container>

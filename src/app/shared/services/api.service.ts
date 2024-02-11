@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, shareReplay, tap } from 'rxjs';
 import { Conversation } from '../../models/conversation';
-import { conversations } from './mocks/conversations-mock';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -15,7 +14,6 @@ export class ApiService {
 
   fetchConversations(): Observable<Conversation[]> {
     return this.http.get<Conversation[]>(`${this.baseUrl}/conversations`).pipe(
-      tap(() => console.log('Call to API for all conversations')),
       shareReplay(this.CACHE_SIZE)
     );
   }
@@ -25,17 +23,13 @@ export class ApiService {
   }
 
   addNewConversation(conversation: Conversation) {
-    console.log('new conversation', conversation);
     return this.http.post<Conversation>(
-      'http://localhost:3000/conversations',
+      `${this.baseUrl}/conversations`,
       conversation
     );
   }
 
   updateConversation(conversationId: string, conversationToUpdate: Conversation) {
     this.http.put<any>('http://localhost:3000/conversations/' + conversationId, conversationToUpdate)
-      .subscribe(response => {
-        console.log('Item updated:', response);
-      });
   }
 }

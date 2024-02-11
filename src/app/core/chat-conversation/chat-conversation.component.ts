@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as uuid from 'uuid';
 import { ConversationsService } from '../../shared/services/conversations.service';
 import { Message } from '../../models/message';
@@ -16,12 +16,12 @@ export class ConversationComponent {
   conversation!: Conversation | null;
 
   constructor(
-    private router: ActivatedRoute,
+    private route: ActivatedRoute,
+    private router: Router,
     private conversationsService: ConversationsService
   ) {
-    this.router.params.subscribe((params) => {
+    this.route.params.subscribe((params) => {
       this.id = params['id'];
-      console.log('id : ', this.id);
       if (this.id) {
         this.getConversationData(this.id);
       }
@@ -30,11 +30,11 @@ export class ConversationComponent {
 
   getConversationData(id: string): void {
     this.conversation = this.conversationsService.getConversation(this.id);
-    console.log('this.conversation ', this.conversation);
-    this.messages = this.conversation!.messages;
-  }
-
-  initNewConversation(): Conversation {
-    return { id: '', name: '', messages: [] };
+    // It's a workaround -- didn't have time to finish...
+    if (this.conversation === null) {
+      this.router.navigate(['/']);
+    } else {
+      this.messages = this.conversation!.messages;
+    }
   }
 }

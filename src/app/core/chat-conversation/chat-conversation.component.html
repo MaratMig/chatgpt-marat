@@ -1,8 +1,11 @@
 @if(messages; as conversations){
-  <div class="messages">
-    @for(message of messages; track message.role) {
-    <app-message [role]="message.role" [content]="message.content"></app-message>
-    }
-  </div>
- }
-
+<div class="messages">
+  @for(message of messages; track message.role) {
+  <app-message
+    class="app-message"
+    [role]="message.role"
+    [content]="message.content"
+  ></app-message>
+  }
+</div>
+}

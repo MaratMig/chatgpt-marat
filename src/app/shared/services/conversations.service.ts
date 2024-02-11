@@ -48,7 +48,6 @@ export class ConversationsService {
       messages: [{ role: 'User', content: message }],
     };
     this.conversations.push(newConversation);
-    // console.log('new conversations', this.conversations);
     this.conversationsSubject.next([...this.conversations]);
     this.apiService
       .addNewConversation(newConversation)

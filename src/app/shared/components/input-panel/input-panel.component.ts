@@ -26,4 +26,5 @@ export class InputPanelComponent implements OnInit {
 
     this.textForm.reset();
   }
+
 }

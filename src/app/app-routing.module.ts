@@ -6,6 +6,7 @@ import { ConversationComponent } from './core/chat-conversation/chat-conversatio
 const routes: Routes = [
   { path: '', component: ConversationComponent },
   { path: 'chat/:id', component: ConversationComponent },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

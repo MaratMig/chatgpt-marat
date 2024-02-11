@@ -34,29 +34,14 @@ export class MainWindowComponent implements OnInit {
   ngOnInit(): void {
     this.conversationsService.currentConversation$.subscribe((conversation) => {
       this.currentConversation = conversation;
-      console.log('Changed conversation : ', this.currentConversation);
     });
   }
 
-  toggleSideNav(sidenav: MatSidenav) {
-    this.changeTransformValue();
+  toggleSideNav() {
     this.opened = !this.opened;
   }
 
-  changeTransformValue() {
-    if (this.opened) {
-      this.dynamicTransformValue =
-        'translateX(260px) translateY(-50%) rotate(0deg) translateZ(0px)';
-    } else {
-      this.dynamicTransformValue =
-        'translateX(0px) translateY(-50%) rotate(180deg) translateZ(0px)';
-    }
-  }
-
-  updateCurrentConversation(conversation: Conversation) {}
-
   submitText(messageContent: string) {
-    console.log('Main this.currentConversation : ', this.currentConversation);
     if (this.currentConversation) {
       this.conversationsService.addMessage(
         this.currentConversation.id,
